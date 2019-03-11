@@ -83,3 +83,66 @@ for x in mycol.find():
 #to return name and addresses
 for x in mycol.find({},{ "_id": 0, "name": 1, "address": 1 }):
   print(x)
+
+#to retrieve data
+# In this particular case: All addreses that start with S 
+myquery = { "address": { "$regex": "^S" } }
+
+mydoc = mycol.find(myquery)
+
+for x in mydoc:
+  print(x)
+# to retrieve all the data sorted by names in order 
+mydoc = mycol.find().sort("name", -1)
+#to retrieve all the data sorted by names in reverse order
+mydoc = mycol.find().sort("name", -1)
+for x in mydoc:
+  print(x)
+  
+# Delete all entries 
+myquery = { "address": "Mountain 21" }
+mycol.delete_one(myquery)
+
+
+#Delete all the entries that start with S 
+myquery = { "address": {"$regex": "^S"} }
+x = mycol.delete_many(myquery)
+print(x.deleted_count, " documents deleted.")
+
+
+# Delete all documents in a collection 
+myquery = { "address": {"$regex": "^S"} }
+x = mycol.delete_many(myquery)
+print(x.deleted_count, " documents deleted.")
+
+#Dropping collections
+mycol.drop()
+
+
+#Updating address with the value 345
+myquery = { "address": "Valley 345" }
+newvalues = { "$set": { "address": "Canyon 123" } }
+
+mycol.update_one(myquery, newvalues)
+
+#print "customers" after the update:
+for x in mycol.find():
+  print(x)
+
+ #Update all documents that start with S
+myquery = { "address": { "$regex": "^S" } }
+newvalues = { "$set": { "name": "Minnie" } }
+
+x = mycol.update_many(myquery, newvalues)
+
+print(x.modified_count, "documents updated.")
+
+
+
+#Limited 
+# to return the first the first 5 documents 
+myresult = mycol.find().limit(5)
+
+#print the result:
+for x in myresult:
+  print(x)
